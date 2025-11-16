@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App - Real-time Weather Forecast</title>
+    <meta name="description" content="Get real-time weather updates with temperature, humidity, and wind speed. Auto-detects your location for accurate local weather.">
+     <link rel="stylesheet" href="weatherapp.css"/>
+</head>
+<body class="bg-default">
+    
+    <div id="loadingState" class="loading">
+        <svg class="loading-icon icon" viewBox="0 0 24 24">
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+        </svg>
+        <p class="loading-text">Loading weather data...</p>
+    </div>
+
+    <!-- Error State -->
+    <div id="errorState" class="error hidden">
+        <div class="card error-card">
+            <svg class="error-icon icon" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+            <h2 class="error-title">Oops!</h2>
+            <p id="errorMessage" class="error-message">Unable to fetch weather data.</p>
+            <button class="btn-primary" onclick="retryFetch()">Try Again</button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="mainContent" class="container hidden">
+        <!-- Search Bar -->
+        <div class="search-container">
+            <div class="search-wrapper">
+                <svg class="search-icon icon" viewBox="0 0 24 24">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input 
+                    type="text" 
+                    id="cityInput" 
+                    placeholder="Search for a city..."
+                    onkeypress="handleSearchKeypress(event)"
+                >
+            </div>
+            <button class="btn-primary" onclick="searchCity()">Search</button>
+            <button class="btn-secondary" onclick="useCurrentLocation()" title="Use my location">
+                <svg class="icon" style="width: 20px; height: 20px;" viewBox="0 0 24 24">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Current Weather Card -->
+        <div class="card">
+            <div class="location">
+                <h1 id="cityName">Loading...</h1>
+                <p id="weatherDescription">-</p>
+            </div>
+
+            <div class="main-weather">
+                <div class="weather-icon" id="mainWeatherIcon"></div>
+                <div style="text-align: center;">
+                    <div class="temperature" id="temperature">--°</div>
+                    <p class="feels-like" id="feelsLike">Feels like --°</p>
+                </div>
+            </div>
+
+            <div class="weather-details">
+                <div class="detail-item">
+                    <svg class="detail-icon icon" viewBox="0 0 24 24">
+                        <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+                    </svg>
+                    <div>
+                        <p class="detail-label">Humidity</p>
+                        <p class="detail-value" id="humidity">--%</p>
+                    </div>
+                </div>
+
+                <div class="detail-item">
+                    <svg class="detail-icon icon" viewBox="0 0 24 24">
+                        <path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"></path>
+                    </svg>
+                    <div>
+                        <p class="detail-label">Wind</p>
+                        <p class="detail-value" id="windSpeed">-- m/s</p>
+                    </div>
+                </div>
+
+                <div class="detail-item full-width">
+                    <svg class="detail-icon icon" viewBox="0 0 24 24">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                    <div>
+                        <p class="detail-label">Visibility</p>
+                        <p class="detail-value" id="visibility">-- km</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5-Day Forecast Card -->
+        <div class="card" id="forecastCard" style="display: none;">
+            <h2 class="forecast-title">5-Day Forecast</h2>
+            <div class="forecast-grid" id="forecastGrid"></div>
+        </div>
+    </div>   
+    <script src="weatherapp.js" defer></script> 
+</body>
+</html>
